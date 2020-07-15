@@ -1,39 +1,35 @@
-#include <vector>
-#include <iostream>
-#include <cmath>
 #include "PID.h"
+
+using namespace std;
+
+/*
+* TODO: Complete the PID class.
+*/
 
 PID::PID() {}
 
 PID::~PID() {}
 
-void PID::Init(double Kp_, double Ki_, double Kd_) {
-  /**
-   * Initialize PID coefficients (and errors, if needed)
-   */
-  Kp = Kp_;
-  Ki = Ki_;
-  Kd = Kd_;
-  
-  iter = 0;
+void PID::Init(double Kp, double Ki, double Kd) {
+	is_prev_cte_init = false;
+	i_error = 0;
+	this->Kp = Kp; 
+	this->Kd = Kd;
+	this->Ki = Ki;
 }
-
-
 
 void PID::UpdateError(double cte) {
-  /**
-   * Update PID errors based on cte.
-   */
-  d_error = cte-p_error;
-  p_error = cte;
-  i_error += cte;
-  iter += 1;
-
+	if (!is_prev_cte_init) {
+		prev_cte = cte;
+		is_prev_cte_init = true;
+	}
+	p_error = cte;
+	d_error = cte - prev_cte;
+	prev_cte = cte;
+	i_error += cte;
 }
 
-double PID::TotalError( ) {
-  /**
-   * Calculate and return the total error
-   */
-  return -Kp * p_error - Kd * d_error - Ki * i_error;  
+double PID::TotalError() {
+	const double steer = -Kp * p_error - Ki * i_error - Kd * d_error;
+	return steer;
 }
