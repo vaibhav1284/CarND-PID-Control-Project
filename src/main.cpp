@@ -3,11 +3,9 @@
 #include "json.hpp"
 #include "PID.h"
 #include <math.h>
-#include <string>
 
 // for convenience
 using json = nlohmann::json;
-# define M_PI           3.14159265358979323846
 
 // For converting back and forth between radians and degrees.
 constexpr double pi() { return M_PI; }
@@ -36,9 +34,9 @@ int main()
 
   PID pid;
   // TODO: Initialize the pid variable.
-  //pid.Init(2.9331227688652457, 10.326589894591526, 0.49316041639454505);
-  pid.Init(0.3, 0.0001, 10);
 
+  pid.Init(0.12, 0.0001, 2.3);
+  
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -52,19 +50,20 @@ int main()
         if (event == "telemetry") {
           // j[1] is the data JSON object
           double cte = std::stod(j[1]["cte"].get<std::string>());
-          double speed = std::stod(j[1]["speed"].get<std::string>());
-          double angle = std::stod(j[1]["steering_angle"].get<std::string>());
-      pid.UpdateError(cte);
-          double steer_value = pid.TotalError();
+          // double speed = std::stod(j[1]["speed"].get<std::string>());
+          // double angle = std::stod(j[1]["steering_angle"].get<std::string>());
+          double steer_value = 0.0;
           /*
-          * TODO: Calculate steering value here, remember the steering value is
+          * TODO: Calcuate steering value here, remember the steering value is
           * [-1, 1].
           * NOTE: Feel free to play around with the throttle and speed. Maybe use
           * another PID controller to control the speed!
           */
+          pid.UpdateError(cte);
+          steer_value -= pid.TotalError();
           
           // DEBUG
-          std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
+          std::cout << "CTE: " << cte << " Steering Value: " << steer_value<< std::endl;
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;

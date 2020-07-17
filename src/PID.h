@@ -2,23 +2,8 @@
 #define PID_H
 
 class PID {
-	bool is_prev_cte_init;
-	double prev_cte;
-public:
-  /*
-  * Errors
-  */
-  double p_error;
-  double i_error;
-  double d_error;
 
-  /*
-  * Coefficients
-  */ 
-  double Kp;
-  double Ki;
-  double Kd;
-
+  public:
   /*
   * Constructor
   */
@@ -43,6 +28,32 @@ public:
   * Calculate the total PID error.
   */
   double TotalError();
+
+  private :
+    /*
+  * Errors
+  */
+  double p_error;
+  double i_error;
+  double d_error;
+  double prev_cte;
+
+  /**
+   * Error counters
+  **/
+  long counter;
+  double errorSum;
+  double minError;
+  double maxError;
+
+  /*
+  * Coefficients
+  */
+  double Kp;
+  double Ki;
+  double Kd;
+
+   
 };
 
 #endif /* PID_H */
