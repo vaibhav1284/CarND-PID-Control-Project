@@ -70,11 +70,12 @@ The final parameters were chosen manually by trial and error method. the values 
 * I : 0.0001
 * D : 2.3
 
-
-
+Alternatively, Twiddle can be used to choose the hyperparameters values instead of setting it manually.
 
 
 ### Simulation 
 
+With the above PID values, vehicle in the simulator was able to steer in the drivable region with an average speed of 32KM/h.
+A short video can be found [here](video/sample_video.mp4)
 
 
